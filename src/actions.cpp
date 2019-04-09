@@ -718,7 +718,7 @@ namespace Action
             }
             Exiv2::DataBuf buf(md.size());
             md.copy(buf.pData_, pImage->byteOrder());
-            Exiv2::hexdump(std::cout, buf.pData_, buf.size_);
+            Exiv2::hexdump(std::cout, buf.pData_, static_cast<long>(buf.size_));
         }
         std::cout << std::endl;
         return true;
@@ -1026,7 +1026,7 @@ namespace Action
             std::cerr << path_ << ": " << _("No Exif data found in the file\n");
             return -3;
         }
-        int rc = 0;
+
         Exiv2::ExifThumb exifThumb(exifData);
         std::string thumbExt = exifThumb.extension();
         if (thumbExt.empty()) {
@@ -1127,7 +1127,7 @@ namespace Action
             }
             std::cout << pvImg.size() << " " << _("bytes") << ") " << _("to file") << " " << pvPath << std::endl;
         }
-        long rc = pvImg.writeFile(pvFile);
+        size_t rc = pvImg.writeFile(pvFile);
         if (rc == 0) {
             std::cerr << path_ << ": " << _("Image does not have preview") << " " << num << "\n";
         }
