@@ -1027,6 +1027,7 @@ namespace Action
             return -3;
         }
 
+        int rc = 0;
         Exiv2::ExifThumb exifThumb(exifData);
         std::string thumbExt = exifThumb.extension();
         if (thumbExt.empty()) {
