@@ -28,6 +28,7 @@ case "$distro_id" in
         ;;
 
     'debian')
+        echo "deb http://deb.debian.org/debian stretch-backports main contrib non-free" >> /etc/apt/sources.list
         apt-get update
         apt-get install -y cmake g++ clang make ccache python3 libexpat1-dev zlib1g-dev libssh-dev libcurl4-openssl-dev libgtest-dev libgmock-dev libxml2-utils
         debian_build_gtest
@@ -68,7 +69,7 @@ case "$distro_id" in
 
     'alpine')
         apk update
-        apk add gcc g++ clang cmake make ccache expat-dev zlib-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils
+        apk add gcc g++ clang cmake make ccache expat-dev zlib-dev libssh-dev curl-dev gtest gtest-dev gmock libintl gettext-dev which dos2unix bash libxml2-utils diffutils python3
         ;;
     *)
         echo "Sorry, no predefined dependencies for your distribution $distro_id exist yet"
