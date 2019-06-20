@@ -206,7 +206,7 @@ namespace Exiv2 {
     //! Nikon Auto Focus binary array - configuration
     extern const ArrayCfg nikonAfCfg = {
         nikonAfId,        // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -221,10 +221,10 @@ namespace Exiv2 {
         { 2, ttUnsignedShort, 1 } // The array contains 4 bytes
     };
 
-    //! Nikon Auto Focus 2 binary array - configuration
-    extern const ArrayCfg nikonAf2Cfg = {
-        nikonAf2Id,       // Group for the elements
-        littleEndian,     // Byte order
+    //! Nikon Auto Focus 21 binary array - configuration
+    extern const ArrayCfg nikonAf21Cfg = {
+        nikonAf21Id,      // Group for the elements
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -232,8 +232,8 @@ namespace Exiv2 {
         true,             // Concatenate gaps
         { 0, ttUnsignedByte,  1 }
     };
-    //! Nikon Auto Focus 2 binary array - definition
-    extern const ArrayDef nikonAf2Def[] = {
+    //! Nikon Auto Focus 21 binary array - definition
+    extern const ArrayDef nikonAf21Def[] = {
         {  0, ttUndefined,     4 }, // Version
         {  4, ttUnsignedByte,  1 }, // ContrastDetectAF
         {  5, ttUnsignedByte,  1 }, // AFAreaMode
@@ -248,11 +248,44 @@ namespace Exiv2 {
         { 26, ttUnsignedShort, 1 }, // AFAreaHeight
         { 28, ttUnsignedShort, 1 }, // ContrastDetectAFInFocus
     };
+    //! Nikon Auto Focus 22 binary array - configuration
+    extern const ArrayCfg nikonAf22Cfg = {
+        nikonAf22Id,      // Group for the elements
+        invalidByteOrder, // Byte order
+        ttUndefined,      // Type for array entry
+        notEncrypted,     // Not encrypted
+        false,            // No size element
+        true,             // Write all tags
+        true,            // Concatenate gaps
+        { 0, ttUnsignedByte,  1 }
+    };
+    //! Nikon Auto Focus 22 binary array - definition
+    extern const ArrayDef nikonAf22Def[] = {
+        {  0, ttUndefined,     4 }, // Version
+        {  4, ttUnsignedByte,  1 }, // ContrastDetectAF
+        {  5, ttUnsignedByte,  1 }, // AFAreaMode
+        {  6, ttUnsignedByte,  1 }, // PhaseDetectAF
+        {  7, ttUnsignedByte,  1 }, // PrimaryAFPoint
+        {  8, ttUnsignedByte,  7 }, // AFPointsUsed
+        { 70, ttUnsignedShort, 1 }, // AFImageWidth
+        { 72, ttUnsignedShort, 1 }, // AFImageHeight
+        { 74, ttUnsignedShort, 1 }, // AFAreaXPosition
+        { 76, ttUnsignedShort, 1 }, // AFAreaYPosition
+        { 78, ttUnsignedShort, 1 }, // AFAreaWidth
+        { 80, ttUnsignedShort, 1 }, // AFAreaHeight
+    };
+
+    //! Nikon AF2 configuration and definitions
+    //  https://github.com/Exiv2/exiv2/issues/646
+    extern const ArraySet nikonAf2Set[] = {
+        { nikonAf21Cfg, nikonAf21Def, EXV_COUNTOF(nikonAf21Def) },
+        { nikonAf22Cfg, nikonAf22Def, EXV_COUNTOF(nikonAf22Def) },
+    };
 
     //! Nikon AF Fine Tune binary array - configuration
     extern const ArrayCfg nikonAFTCfg = {
         nikonAFTId,       // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -270,7 +303,7 @@ namespace Exiv2 {
     //! Nikon File Info binary array - configuration
     extern const ArrayCfg nikonFiCfg = {
         nikonFiId,        // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -288,7 +321,7 @@ namespace Exiv2 {
     //! Nikon Multi Exposure binary array - configuration
     extern const ArrayCfg nikonMeCfg = {
         nikonMeId,        // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -307,7 +340,7 @@ namespace Exiv2 {
     //! Nikon Flash Info binary array - configuration 1
     extern const ArrayCfg nikonFl1Cfg = {
         nikonFl1Id,       // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -331,7 +364,7 @@ namespace Exiv2 {
     //! Nikon Flash Info binary array - configuration 2
     extern const ArrayCfg nikonFl2Cfg = {
         nikonFl2Id,       // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -353,7 +386,7 @@ namespace Exiv2 {
     //! Nikon Flash Info binary array - configuration 3
     extern const ArrayCfg nikonFl3Cfg = {
         nikonFl3Id,       // Group for the elements
-        littleEndian,     // Byte order
+        invalidByteOrder, // Use byte order from parent
         ttUndefined,      // Type for array entry
         notEncrypted,     // Not encrypted
         false,            // No size element
@@ -932,7 +965,8 @@ namespace Exiv2 {
         { Tag::root, nikonLd2Id,       nikon3Id,         0x0098    },
         { Tag::root, nikonLd3Id,       nikon3Id,         0x0098    },
         { Tag::root, nikonMeId,        nikon3Id,         0x00b0    },
-        { Tag::root, nikonAf2Id,       nikon3Id,         0x00b7    },
+        { Tag::root, nikonAf21Id,      nikon3Id,         0x00b7    },
+        { Tag::root, nikonAf22Id,      nikon3Id,         0x00b7    },
         { Tag::root, nikonFiId,        nikon3Id,         0x00b8    },
         { Tag::root, nikonAFTId,       nikon3Id,         0x00b9    },
         { Tag::root, nikonFl1Id,       nikon3Id,         0x00a8    },
@@ -1274,7 +1308,7 @@ namespace Exiv2 {
         {    0x0098, nikon3Id,         EXV_COMPLEX_BINARY_ARRAY(nikonLdSet, nikonSelector) },
         {    0x00a8, nikon3Id,         EXV_COMPLEX_BINARY_ARRAY(nikonFlSet, nikonSelector) },
         {    0x00b0, nikon3Id,         EXV_BINARY_ARRAY(nikonMeCfg, nikonMeDef)  },
-        {    0x00b7, nikon3Id,         EXV_BINARY_ARRAY(nikonAf2Cfg, nikonAf2Def)},
+        {    0x00b7, nikon3Id,         EXV_COMPLEX_BINARY_ARRAY(nikonAf2Set, nikonAf2Selector) },
         {    0x00b8, nikon3Id,         EXV_BINARY_ARRAY(nikonFiCfg, nikonFiDef)  },
         {    0x00b9, nikon3Id,         EXV_BINARY_ARRAY(nikonAFTCfg, nikonAFTDef)  },
         {  Tag::all, nikon3Id,         newTiffEntry                              },
@@ -1301,7 +1335,8 @@ namespace Exiv2 {
         {  Tag::all, nikonAfId,        newTiffBinaryElement                      },
 
         // Nikon3 auto focus 2
-        {  Tag::all, nikonAf2Id,       newTiffBinaryElement                      },
+        {  Tag::all, nikonAf21Id,      newTiffBinaryElement                      },
+        {  Tag::all, nikonAf22Id,      newTiffBinaryElement                      },
 
         // Nikon3 AF Fine Tune
         {  Tag::all, nikonAFTId,       newTiffBinaryElement                      },
@@ -1540,7 +1575,7 @@ namespace Exiv2 {
               IptcData&          iptcData,
               XmpData&           xmpData,
         const byte*              pData,
-              uint32_t           size,
+              size_t             size,
               uint32_t           root,
               FindDecoderFct     findDecoderFct,
               TiffHeaderBase*    pHeader
@@ -1568,7 +1603,7 @@ namespace Exiv2 {
     WriteMethod TiffParserWorker::encode(
               BasicIo&           io,
         const byte*              pData,
-              uint32_t           size,
+              size_t             size,
         const ExifData&          exifData,
         const IptcData&          iptcData,
         const XmpData&           xmpData,
@@ -1625,11 +1660,11 @@ namespace Exiv2 {
             DataBuf header = pHeader->write();
             BasicIo::UniquePtr tempIo(new MemIo);
             assert(tempIo.get() != 0);
-            IoWrapper ioWrapper(*tempIo, header.pData_, header.size_, pOffsetWriter);
+            IoWrapper ioWrapper(*tempIo, header.pData_, (long)header.size_, pOffsetWriter);
             uint32_t imageIdx(uint32_t(-1));
             createdTree->write(ioWrapper,
                                pHeader->byteOrder(),
-                               header.size_,
+                               (int32_t)header.size_,
                                uint32_t(-1),
                                uint32_t(-1),
                                imageIdx);
@@ -1649,7 +1684,7 @@ namespace Exiv2 {
 
     TiffComponent::UniquePtr TiffParserWorker::parse(
         const byte*              pData,
-              uint32_t           size,
+              size_t             size,
               uint32_t           root,
               TiffHeaderBase*    pHeader
     )
@@ -1719,7 +1754,7 @@ namespace Exiv2 {
     {
     }
 
-    bool TiffHeaderBase::read(const byte* pData, uint32_t size)
+    bool TiffHeaderBase::read(const byte* pData, size_t size)
     {
         if (!pData || size < 8) return false;
 

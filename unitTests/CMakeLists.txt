@@ -1,4 +1,5 @@
 find_package(GTest REQUIRED)
+enable_testing()
 
 add_executable(unit_tests mainTestRunner.cpp
     test_types.cpp
@@ -14,6 +15,8 @@ add_executable(unit_tests mainTestRunner.cpp
     test_slice.cpp
     test_image_int.cpp
     test_ImageFactory.cpp
+    test_PngChunks.cpp
+    test_ImageJpeg.cpp
     $<TARGET_OBJECTS:exiv2lib_int>
 )
 
@@ -42,10 +45,9 @@ set_target_properties(unit_tests PROPERTIES
     COMPILE_FLAGS ${EXTRA_COMPILE_FLAGS}
 )
 
-if (USING_CONAN)
-    target_compile_definitions(unit_tests PRIVATE ${CONAN_COMPILE_DEFINITIONS_GTEST})
+if (MSVC)	
+    # Fix linking issue about missing 3rd party PDB
+    set_target_properties(unit_tests PROPERTIES LINK_FLAGS "/ignore:4099")	
 endif()
 
-if (MSVC)
-    set_target_properties(unit_tests PROPERTIES LINK_FLAGS "/ignore:4099")
-endif()
+add_test(NAME unit_tests COMMAND unit_tests)

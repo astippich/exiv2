@@ -29,7 +29,7 @@
 
 /* Define to `const' or to empty, depending on the second argument of `iconv'. */
 #cmakedefine ICONV_ACCEPTS_CONST_INPUT
-#if defined ICONV_ACCEPTS_CONST_INPUT
+#if defined(ICONV_ACCEPTS_CONST_INPUT) || defined(__NetBSD__)
 #define EXV_ICONV_CONST const
 #else
 #define EXV_ICONV_CONST
@@ -47,8 +47,8 @@
 // Define if you have the <sys/mman.h> header file.
 #cmakedefine EXV_HAVE_SYS_MMAN_H
 
-// Define if you have are using the zlib library.
-#cmakedefine EXV_HAVE_LIBZ
+// Define if PNG support has been enabled
+#cmakedefine EXIV2_ENABLE_PNG
 
 /* Define if you have (Exiv2/xmpsdk) Adobe XMP Toolkit. */
 #cmakedefine EXV_HAVE_XMP_TOOLKIT

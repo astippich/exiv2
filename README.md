@@ -34,6 +34,7 @@
     3. [MinGW](#5-3)
     4. [Cygwin](#5-4)
     5. [Microsoft Visual C++](#5-5)
+    6. [Unix](#5-6)
 
 <div id="1">
 
@@ -578,7 +579,7 @@ For new bug reports and feature requests, please open an issue in Github.
 
 ## 4 Running the test suite
 
-The test suite is a mix of bash and python scripts.  The python scripts are new to v0.27 and the bash scripts are being replaced as time permits.
+The test suite is a mix of bash and python scripts (in addition to the unit tests written in C++).  The python scripts are new to v0.27 and the bash scripts are being replaced as time permits.
 
 <div id="4-1">
 
@@ -637,16 +638,19 @@ $ ./icc-test.sh
 
 The code for the unit tests is in `<exiv2dir>/unitTests`
 
-To build the unit tests, use the *cmake* option `-DEXIV2_BUILD_UNIT_TESTS=ON`.
+To build the unit tests, use the *cmake* option `-DEXIV2_BUILD_UNIT_TESTS=ON`. Note that we depends on GTest and GMock for being able to compile and run those tests.
 
 To execute the unit tests:
 
 ```bash
 $ cd <exiv2dir>/build
 $ bin/unit_tests
-```
 
-There is a discussion on the web about installing GTest: [https://github.com/Exiv2/exiv2/issues/575](https://github.com/Exiv2/exiv2/issues/575)
+# Alternatively you can run them with CTest
+$ cd <exiv2dir>/build
+$ ctest
+
+```
 
 [TOC](#TOC)
 <div id="5">
@@ -799,7 +803,6 @@ set "PS1=\! CYGWIN64:\u@\h:\w \$ "
 bash.exe -norc
 ```
 
-
 [TOC](#TOC)
 <div id="5-5">
 
@@ -824,5 +827,36 @@ cmd
 ```
 
 [TOC](#TOC)
+<div id="5-6">
 
-Written by Robin Mills<br>robin@clanmills.com<br>Updated: 2018-12-18
+### Unix
+
+Exiv2 can be built on many Unix and Linux distros.  We actively support the Unix Distributions NetBSD and FreeBSD.
+
+I am willing to support Exiv2 on commercial Unix distributions such as Solaris, AIX, HP-UX and OSF/1 provided you provide with an ssh account on your platform.  I will require super-user privileges to install software.
+
+#### NetBSD
+
+You can build exiv2 from source using the methods described for linux.  I built and installed exiv2 using "Pure CMake" and didn't require conan.
+You will want to use the package manager `pkgsrc` to build/install:
+
+1. gcc  (currently GCC 5.5.0)
+2. python3
+3. cmake
+4. bash
+5. sudo
+6. chksum
+7. gettext
+
+I entered links into the file system `# ln -s /usr/pkg/bin/python37 /usr/local/bin/python3` and `# ln -s /usr/pkg/bin/bash /bin/bash`
+It's important to ensure that `LD_LIBRARY_PATH` includes `/usr/local/lib` and `/usr/pkg/lib`.  It's important to ensure that PATH includes `/usr/local/bin`, `/usr/pkg/bin` and `/usr/pkg/sbin`.
+
+#### FreeBSD
+
+FreeBSD uses pkg as the package manager.  You should install the dependency expat.  libz is already installed.  As with NetBSD, you should use pkg to install python3, cmake, bash, sudo, gettext and gcc.  The default GCC compiler is currently 8.3.0.
+
+[TOC](#TOC)
+
+Written by Robin Mills
+
+Revised: 2019-05-11

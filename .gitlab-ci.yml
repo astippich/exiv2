@@ -21,6 +21,7 @@ variables:
 #   (for cmake logs)
 .build_template: &distro_build
   script:
+    - PROFILE=~/.bash_profile && test -f $PROFILE && source $PROFILE
     - python3 ci/test_build.py
   artifacts:
     when: on_failure
@@ -55,7 +56,7 @@ Archlinux:
   <<: *distro_build
 
 Ubuntu:
-  image: ubuntu:18.04
+  image: ubuntu:18.10
   <<: *default_config
   <<: *distro_build
 
@@ -70,7 +71,7 @@ OpenSUSE:
   <<: *distro_build
 
 Alpine:
-  image: alpine:3.8
+  image: alpine:3.9
   <<: *default_config
   <<: *distro_build
 

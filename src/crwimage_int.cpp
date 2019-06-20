@@ -283,7 +283,7 @@ namespace Exiv2 {
         if (size < 4)
             throw Error(kerCorruptedMetadata);
         uint32_t o = getULong(pData + size - 4, byteOrder);
-        if ( o+2 > size )
+        if ( o > size-2 )
             throw Error(kerCorruptedMetadata);
         uint16_t count = getUShort(pData + o, byteOrder);
 #ifdef DEBUG
@@ -291,7 +291,7 @@ namespace Exiv2 {
                   <<", " << count << " entries \n";
 #endif
         o += 2;
-        if ( (o + (count * 10)) > size )
+        if ( static_cast<uint32_t>(count) * 10 > size-o )
             throw Error(kerCorruptedMetadata);
 
         for (uint16_t i = 0; i < count; ++i) {
@@ -543,13 +543,13 @@ namespace Exiv2 {
     {
         if (isAllocated_) {
             delete pData_;
-            pData_ = 0;
+            pData_ = nullptr;
             size_ = 0;
         }
         isAllocated_ = true;
-        std::pair<byte *, long> p = buf.release();
+        auto p = buf.release();
         pData_ = p.first;
-        size_  = p.second;
+        size_  = (uint32_t)p.second;
         if (size_ > 8 && dataLocation() == directoryData) {
             tag_ &= 0x3fff;
         }
@@ -572,12 +572,11 @@ namespace Exiv2 {
 
     DataLocId CiffComponent::dataLocation(uint16_t tag)
     {
-        DataLocId di = invalidDataLocId;
         switch (tag & 0xc000) {
-        case 0x0000: di = valueData; break;
-        case 0x4000: di = directoryData; break;
+        case 0x0000: return valueData;
+        case 0x4000: return directoryData;
+        default: throw Error(kerCorruptedMetadata);
         }
-        return di;
     } // CiffComponent::dataLocation
 
     /*!
@@ -1065,7 +1064,7 @@ namespace Exiv2 {
         const ExifData::const_iterator ed2 = image.exifData().findKey(k2);
         const ExifData::const_iterator edEnd = image.exifData().end();
 
-        long size = 0;
+        size_t size = 0;
         if (ed1 != edEnd) size += ed1->size();
         if (ed2 != edEnd) size += ed2->size();
         if (size != 0) {
@@ -1155,8 +1154,9 @@ namespace Exiv2 {
         CiffComponent* cc = pHead->findComponent(pCrwMapping->crwTagId_,
                                                  pCrwMapping->crwDir_);
         if (edX != edEnd || edY != edEnd || edO != edEnd) {
-            uint32_t size = 28;
-            if (cc && cc->size() > size) size = cc->size();
+            size_t size = 28;
+            if (cc && cc->size() > size)
+                size = cc->size();
             DataBuf buf(size);
             std::memset(buf.pData_, 0x0, buf.size_);
             if (cc) std::memcpy(buf.pData_ + 8, cc->pData() + 8, cc->size() - 8);
